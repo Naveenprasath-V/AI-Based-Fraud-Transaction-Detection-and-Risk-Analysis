@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FraudGuard | Transaction Risk Analysis</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <aside class="sidebar">
+        <div class="brand">🛡️ FraudGuard</div>
+        <p class="menu-title">MAIN MENU</p>
+        <a href="#dashboard" class="nav active">▦ Dashboard</a>
+        <a href="#analyzer" class="nav">⌕ Analyze Transaction</a>
+        <a href="#history" class="nav">◷ Transaction History</a>
+        <div class="sidebar-bottom">
+            <span class="status-dot"></span> System Online
+            <p>Fraud Detection Demo</p>
+        </div>
+    </aside>
+
+    <main class="main" id="dashboard">
+        <header class="topbar">
+            <div>
+                <p class="eyebrow">SECURITY INTELLIGENCE</p>
+                <h1>Fraud Detection Dashboard</h1>
+                <p class="subtitle">Monitor transactions and identify suspicious activity.</p>
+            </div>
+            <div class="profile">
+                <div class="avatar">FG</div>
+                <div><strong>Administrator</strong><small>Security Analyst</small></div>
+            </div>
+        </header>
+
+        <section class="stats">
+            <article class="stat-card">
+                <div class="stat-icon blue">↗</div>
+                <p>Total Analyzed</p>
+                <h2 id="totalCount">0</h2>
+                <small>Transactions checked</small>
+            </article>
+            <article class="stat-card">
+                <div class="stat-icon red">⚠</div>
+                <p>High Risk</p>
+                <h2 id="highCount">0</h2>
+                <small>Require attention</small>
+            </article>
+            <article class="stat-card">
+                <div class="stat-icon orange">◉</div>
+                <p>Medium Risk</p>
+                <h2 id="mediumCount">0</h2>
+                <small>Review recommended</small>
+            </article>
+            <article class="stat-card">
+                <div class="stat-icon green">✓</div>
+                <p>Low Risk</p>
+                <h2 id="lowCount">0</h2>
+                <small>Lower-risk transactions</small>
+            </article>
+        </section>
+
+        <section class="content-grid">
+            <article class="panel analyzer" id="analyzer">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Analyze a Transaction</h2>
+                        <p>Enter transaction details to estimate its risk.</p>
+                    </div>
+                    <span class="live-label">● LIVE DEMO</span>
+                </div>
+
+                <form id="fraudForm">
+                    <div class="form-grid">
+                        <div class="field">
+                            <label for="transactionId">Transaction ID</label>
+                            <input id="transactionId" placeholder="e.g. TXN1001">
+                        </div>
+                        <div class="field">
+                            <label for="amount">Transaction Amount (₹)</label>
+                            <input id="amount" type="number" min="0.01" step="0.01"
+                                   placeholder="Enter amount" required>
+                        </div>
+                        <div class="field">
+                            <label for="frequency">Transactions in Last Hour</label>
+                            <input id="frequency" type="number" min="1" max="1000"
+                                   value="1" required>
+                        </div>
+                        <div class="field">
+                            <label for="location">Transaction Location</label>
+                            <select id="location">
+                                <option value="local">Usual Location</option>
+                                <option value="unusual">Unusual Location</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="check-options">
+                        <label class="check-item">
+                            <input type="checkbox" id="international">
+                            <span><strong>International Transaction</strong>
+                            <small>Payment from another country</small></span>
+                        </label>
+                        <label class="check-item">
+                            <input type="checkbox" id="newDevice">
+                            <span><strong>New Device Detected</strong>
+                            <small>Device not previously recognized</small></span>
+                        </label>
+                    </div>
+
+                    <button type="submit" class="primary-btn">⌕ Analyze Transaction</button>
+                    <button type="reset" class="reset-btn">Clear Form</button>
+                </form>
+
+                <div id="result" class="result hidden" aria-live="polite">
+                    <div class="result-top">
+                        <div>
+                            <p class="eyebrow">RISK ASSESSMENT RESULT</p>
+                            <h2 id="riskTitle">Low Risk</h2>
+                        </div>
+                        <div class="score-circle" id="scoreCircle">
+                            <strong id="riskScore">0</strong>
+                            <small>/ 100</small>
+                        </div>
+                    </div>
+                    <div class="score-track"><div id="scoreBar"></div></div>
+                    <p id="riskDescription"></p>
+                    <h3>Risk Indicators</h3>
+                    <ul id="riskReasons"></ul>
+                    <p class="disclaimer">Demo estimate only. This is not a real bank fraud decision.</p>
+                </div>
+            </article>
+
+            <article class="panel chart-panel">
+                <div class="panel-heading">
+                    <div>
+                        <h2>Risk Distribution</h2>
+                        <p>Results from this browser session</p>
+                    </div>
+                </div>
+                <div class="chart-wrap">
+                    <canvas id="riskChart"></canvas>
+                </div>
+                <div class="chart-legend">
+                    <span><i class="legend-dot low-dot"></i> Low risk</span>
+                    <span><i class="legend-dot medium-dot"></i> Medium risk</span>
+                    <span><i class="legend-dot high-dot"></i> High risk</span>
+                </div>
+                <div class="tip-box">
+                    <strong>💡 Security Tip</strong>
+                    <p>Review unusual locations, high transaction values, and repeated payments together.</p>
+                </div>
+            </article>
+        </section>
+
+        <section class="panel history-panel" id="history">
+            <div class="panel-heading history-heading">
+                <div>
+                    <h2>Recent Transactions</h2>
+                    <p>Transactions analyzed during this session</p>
+                </div>
+                <button id="exportBtn" class="secondary-btn">↓ Export CSV</button>
+            </div>
+            <div class="table-wrap">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Amount</th>
+                            <th>Location</th>
+                            <th>Risk Score</th>
+                            <th>Risk Level</th>
+                            <th>Time</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionTable">
+                        <tr><td colspan="6" class="empty">No transactions analyzed yet.</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <footer>
+            <span>🛡️ FraudGuard</span>
+            <span>Academic Project · Browser-Based Demo</span>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
